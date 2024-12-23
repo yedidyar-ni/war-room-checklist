@@ -184,7 +184,7 @@ export default function Checklist() {
         🚨 War Room: {decodeURIComponent(formattedDescription)}
       </h1>
 
-      <div className="bg-red-50 p-4 rounded-lg mb-6 text-center text-sm">
+      <div className="bg-blue-300 p-4 rounded-lg mb-6 text-center text-sm">
         <p className="font-medium">
           Remember: Stay calm and follow the checklist
         </p>

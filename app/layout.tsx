@@ -1,9 +1,9 @@
 import "./globals.css";
-import { Inter } from "next/font/google";
+import { Quicksand } from "next/font/google";
 import { WarRoomProvider } from "../contexts/WarRoomContext";
 import { Toaster } from "@/components/ui/sonner";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Quicksand({ subsets: ["latin"] });
 
 export const metadata = {
   title: "War Room App",
