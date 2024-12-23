@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <WarRoomProvider>{children}</WarRoomProvider>
-        <Toaster />
+        <Toaster position="bottom-center" />
       </body>
     </html>
   );
