@@ -14,8 +14,7 @@ import {
 } from "@/components/ui/accordion";
 
 export default function Home() {
-  const { description, setDescription, logEvent, setIsWarRoomOpen } =
-    useWarRoom();
+  const { title, setTitle, logEvent, setIsWarRoomOpen } = useWarRoom();
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -23,13 +22,10 @@ export default function Home() {
     e.preventDefault();
     setIsLoading(true);
     setIsWarRoomOpen(true);
-    logEvent(`Opened war room: ${description}`);
+    logEvent(`Opened war room: ${title}`);
 
     // Send message to Slack
-    await sendSlackMessage(
-      "war-room-channel",
-      `New war room opened: ${description}`
-    );
+    await sendSlackMessage("war-room-channel", `New war room opened: ${title}`);
 
     // Navigate to checklist page
     router.push("/checklist");
@@ -43,13 +39,13 @@ export default function Home() {
           <Input
             type="text"
             placeholder="War room short description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
           />
           <Button
             className="bg-blue-500 hover:bg-blue-600 text-white"
             onClick={handleOpenWarRoom}
-            disabled={isLoading || !description.trim()}
+            disabled={isLoading || !title.trim()}
           >
             {isLoading ? "Opening..." : "Open War Room"}
           </Button>

@@ -22,8 +22,8 @@ interface ChecklistItem {
 }
 
 interface WarRoomContextType {
-  description: string;
-  setDescription: (description: string) => void;
+  title: string;
+  setTitle: (title: string) => void;
   formattedDescription: string;
   logEvent: (description: string) => void;
   events: LogEvent[];
@@ -36,16 +36,16 @@ interface WarRoomContextType {
 const WarRoomContext = createContext<WarRoomContextType | undefined>(undefined);
 
 export function WarRoomProvider({ children }: { children: ReactNode }) {
-  const [description, setDescriptionState] = useState("");
+  const [title, setTitleState] = useState("");
   const [events, setEvents] = useState<LogEvent[]>([]);
   const [checklistItems, setChecklistItems] = useState<ChecklistItem[]>([]);
   const [isWarRoomOpen, setIsWarRoomOpen] = useState(false);
 
-  const setDescription = useCallback((newDescription: string) => {
-    setDescriptionState(newDescription);
+  const setTitle = useCallback((newTitle: string) => {
+    setTitleState(newTitle);
   }, []);
 
-  const formattedDescription = encodeURIComponent(description);
+  const formattedDescription = encodeURIComponent(title);
 
   const logEvent = useCallback((eventDescription: string) => {
     const newEvent = {
@@ -58,8 +58,8 @@ export function WarRoomProvider({ children }: { children: ReactNode }) {
   return (
     <WarRoomContext.Provider
       value={{
-        description,
-        setDescription,
+        title,
+        setTitle,
         formattedDescription,
         logEvent,
         events,

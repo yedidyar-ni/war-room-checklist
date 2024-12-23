@@ -32,11 +32,12 @@ export default function Logger() {
         <h1 className="text-4xl font-bold">
           War Room Logger: {decodeURIComponent(formattedDescription)}
         </h1>
-        <Link href={isWarRoomOpen ? "/checklist" : "/"}>
-          <Button className="bg-blue-500 hover:bg-blue-600 text-white">
-            {isWarRoomOpen ? "Return to Checklist" : "Return to Home"}
-          </Button>
-        </Link>
+        <Button
+          className="bg-blue-500 hover:bg-blue-600 text-white"
+          onClick={handleCopyEvents}
+        >
+          Copy All Events
+        </Button>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
@@ -57,12 +58,11 @@ export default function Logger() {
         </table>
       </div>
       <div className="fixed bottom-8 right-8">
-        <Button
-          className="bg-blue-500 hover:bg-blue-600 text-white"
-          onClick={handleCopyEvents}
-        >
-          Copy All Events
-        </Button>
+        <Link href={isWarRoomOpen ? "/checklist" : "/"}>
+          <Button className="bg-blue-500 hover:bg-blue-600 text-white">
+            {isWarRoomOpen ? "Return to Checklist" : "Return to Home"}
+          </Button>
+        </Link>
       </div>
     </main>
   );
