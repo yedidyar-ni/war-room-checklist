@@ -233,7 +233,11 @@ export default function Checklist() {
     );
     const item = checklistItems.find((item) => item.id === id);
     if (item) {
-      logEvent(`${item.checked ? "Unchecked" : "Checked"} item: ${item.title}`);
+      logEvent(
+        `${item.checked ? "Reopened" : "Completed"} checklist item: ${
+          item.title
+        }`
+      );
     }
   };
 
@@ -268,7 +272,6 @@ export default function Checklist() {
               <Checkbox
                 checked={item.checked}
                 onCheckedChange={() => handleCheck(item.id)}
-                disabled={item.checked}
                 className="h-5 w-5"
               />
               <AccordionTrigger className="hover:no-underline py-2">
