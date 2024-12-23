@@ -191,7 +191,7 @@ export default function Home() {
                     htmlFor="title"
                     className="block text-sm font-medium mb-2 text-gray-700"
                   >
-                    Incident Title
+                    Incident Title <span className="text-red-500">*</span>
                   </label>
                   <Input
                     id="title"
@@ -210,7 +210,8 @@ export default function Home() {
                     htmlFor="description"
                     className="block text-sm font-medium mb-2 text-gray-700"
                   >
-                    Detailed Description
+                    Detailed Description{" "}
+                    <span className="text-gray-500">(optional)</span>
                   </label>
                   <Textarea
                     id="description"
@@ -219,14 +220,13 @@ export default function Home() {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     className="w-full min-h-[100px] resize-y"
-                    required
-                    aria-required="true"
+                    aria-required="false"
                   />
                 </div>
                 <Button
                   type="submit"
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 h-12"
-                  disabled={isLoading || !title.trim() || !description.trim()}
+                  disabled={isLoading || !title.trim()}
                   aria-label={
                     isLoading ? "Opening war room..." : "Open war room"
                   }
