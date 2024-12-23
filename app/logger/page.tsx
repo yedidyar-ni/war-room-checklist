@@ -3,6 +3,7 @@
 import { useWarRoom } from "@/contexts/WarRoomContext";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export default function Logger() {
   const { formattedDescription, events, isWarRoomOpen } = useWarRoom();
@@ -16,14 +17,17 @@ export default function Logger() {
     });
   };
 
-  const handleCopyEvents = () => {
-    const eventText = events
-      .map((event) => `${formatTime(event.dateTime)} - ${event.description}`)
-      .join("\n");
-    navigator.clipboard
-      .writeText(eventText)
-      .then(() => alert("Events copied to clipboard"))
-      .catch((err) => console.error("Failed to copy events: ", err));
+  const handleCopyEvents = async () => {
+    try {
+      const eventText = events
+        .map((event) => `${formatTime(event.dateTime)} - ${event.description}`)
+        .join("\n");
+      await navigator.clipboard.writeText(eventText);
+      toast.success("Events copied to clipboard");
+    } catch (err) {
+      console.error("Failed to copy events: ", err);
+      toast.error("Failed to copy events to clipboard");
+    }
   };
 
   return (
