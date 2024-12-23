@@ -36,12 +36,12 @@ export default function Home() {
   return (
     <main className="min-h-screen flex items-center justify-center p-6">
       <div className="w-full max-w-2xl space-y-6">
-        <Card className="border-2 border-blue-200 shadow-lg">
+        <Card className="border border-gray-200 shadow-sm bg-white/50 backdrop-blur-sm">
           <CardHeader className="space-y-2">
-            <CardTitle className="text-2xl md:text-3xl text-center text-blue-900">
+            <CardTitle className="text-2xl md:text-3xl text-center text-gray-800">
               Open War Room
             </CardTitle>
-            <CardDescription className="text-center text-blue-600">
+            <CardDescription className="text-center text-gray-600">
               Coordinate incident response and team collaboration
             </CardDescription>
           </CardHeader>
@@ -129,7 +129,7 @@ export default function Home() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border border-gray-200 shadow-sm bg-white/50 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="text-xl text-gray-800">Quick Tips</CardTitle>
           </CardHeader>
@@ -139,25 +139,19 @@ export default function Home() {
                 <span className="text-blue-500" aria-hidden="true">
                   •
                 </span>
-                Assign clear roles: Incident Commander, Communications Lead
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              </li> 
+              <li className="flex items-center gap-2">
+                <span className="text-blue-500" aria-hidden="true">
+                  •
+                </span>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
               </li>
               <li className="flex items-center gap-2">
                 <span className="text-blue-500" aria-hidden="true">
                   •
                 </span>
-                Document all actions and decisions in real-time
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="text-blue-500" aria-hidden="true">
-                  •
-                </span>
-                Keep stakeholders updated regularly
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="text-blue-500" aria-hidden="true">
-                  •
-                </span>
-                Focus on immediate containment before root cause analysis
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
               </li>
             </ul>
           </CardContent>

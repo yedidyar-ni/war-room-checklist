@@ -4,6 +4,8 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
+  background-color: #f0f4f8; /* Soft blue-gray color */
+  color: #1a1a1a;
 }
 
 @layer utilities {
