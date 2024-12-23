@@ -17,6 +17,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { AlertCircle } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function Checklist() {
   const router = useRouter();
@@ -236,23 +242,31 @@ export default function Checklist() {
         ))}
       </Accordion>
 
-      {allChecked && (
-        <Card className="mt-8 border-green-200 bg-green-50">
-          <CardContent className="pt-6 space-y-4">
-            <Button
-              onClick={handleCloseWarRoom}
-              className="w-full"
-              variant="default"
-            >
-              Close War Room
-            </Button>
-            <p className="text-sm text-gray-600 text-center">
-              Move to the logger page and copy the logged process to start
-              writing the retro
-            </p>
-          </CardContent>
-        </Card>
-      )}
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Card className="mt-8 border-green-200 bg-green-50">
+              <CardContent className="pt-6 space-y-4">
+                <Button
+                  onClick={handleCloseWarRoom}
+                  className="w-full"
+                  variant="default"
+                  disabled={!allChecked}
+                >
+                  Close War Room
+                </Button>
+                <p className="text-sm text-gray-600 text-center">
+                  Move to the logger page and copy the logged process to start
+                  writing the retro
+                </p>
+              </CardContent>
+            </Card>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Complete all checklist items to close the war room</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
 
       <div className="fixed bottom-6 right-6">
         <Link href="/logger">
