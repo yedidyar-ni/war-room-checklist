@@ -1,28 +1,37 @@
-'use client'
+"use client";
 
-import { useWarRoom } from '@/contexts/WarRoomContext'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
+import { useWarRoom } from "@/contexts/WarRoomContext";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Logger() {
-  const { description, formattedDescription, events, isWarRoomOpen } = useWarRoom()
+  const { formattedDescription, events, isWarRoomOpen } = useWarRoom();
 
   const formatTime = (dateTimeString: string) => {
     const date = new Date(dateTimeString);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    return date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
   };
 
   const handleCopyEvents = () => {
-    const eventText = events.map(event => `${formatTime(event.dateTime)} - ${event.description}`).join('\n')
-    navigator.clipboard.writeText(eventText)
-      .then(() => alert('Events copied to clipboard'))
-      .catch(err => console.error('Failed to copy events: ', err))
-  }
+    const eventText = events
+      .map((event) => `${formatTime(event.dateTime)} - ${event.description}`)
+      .join("\n");
+    navigator.clipboard
+      .writeText(eventText)
+      .then(() => alert("Events copied to clipboard"))
+      .catch((err) => console.error("Failed to copy events: ", err));
+  };
 
   return (
     <main className="min-h-screen p-24">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-4xl font-bold">War Room Logger: {decodeURIComponent(formattedDescription)}</h1>
+        <h1 className="text-4xl font-bold">
+          War Room Logger: {decodeURIComponent(formattedDescription)}
+        </h1>
         <Link href={isWarRoomOpen ? "/checklist" : "/"}>
           <Button className="bg-blue-500 hover:bg-blue-600 text-white">
             {isWarRoomOpen ? "Return to Checklist" : "Return to Home"}
@@ -48,9 +57,13 @@ export default function Logger() {
         </table>
       </div>
       <div className="fixed bottom-8 right-8">
-        <Button className="bg-blue-500 hover:bg-blue-600 text-white" onClick={handleCopyEvents}>Copy All Events</Button>
+        <Button
+          className="bg-blue-500 hover:bg-blue-600 text-white"
+          onClick={handleCopyEvents}
+        >
+          Copy All Events
+        </Button>
       </div>
     </main>
-  )
+  );
 }
-

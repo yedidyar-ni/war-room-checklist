@@ -64,10 +64,10 @@ export default function Home() {
               <div className="text-center border rounded-lg p-4 bg-gray-50">
                 <p className="text-gray-600">Consider opening a War Room if:</p>
                 <ul className="text-sm text-gray-600 mt-2 text-left list-disc pl-6">
-                  <li>There's a critical production incident</li>
-                  <li>Multiple teams need to coordinate</li>
-                  <li>Customer-facing services are impacted</li>
-                  <li>Immediate response is required</li>
+                  <li>{`There's a critical production incident`}</li>
+                  <li>{`Multiple teams need to coordinate`}</li>
+                  <li>{`Customer-facing services are impacted`}</li>
+                  <li>{`Immediate response is required`}</li>
                 </ul>
                 <a
                   href="#"

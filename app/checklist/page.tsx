@@ -45,8 +45,8 @@ export default function Checklist() {
           expanded: false,
           content: (
             <p className="mt-2 text-sm text-gray-600">
-              A war room should be opened when there&apos;s a critical issue
-              affecting multiple users or core functionality of the system.
+              {`A war room should be opened when there's a critical issue
+              affecting multiple users or core functionality of the system.`}
             </p>
           ),
         },
