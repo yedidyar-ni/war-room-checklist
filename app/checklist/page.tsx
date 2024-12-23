@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -23,6 +23,17 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function Checklist() {
   const router = useRouter();
@@ -33,6 +44,9 @@ export default function Checklist() {
     setChecklistItems,
     isWarRoomOpen,
   } = useWarRoom();
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [updateMessage, setUpdateMessage] = useState("");
 
   useEffect(() => {
     if (!isWarRoomOpen) {
@@ -67,17 +81,39 @@ export default function Checklist() {
           expanded: false,
           content: (
             <div className="mt-2 grid gap-2">
-              <Button
-                className="w-full bg-red-500 hover:bg-red-600 text-white"
-                onClick={() => {
-                  toast.success("Emergency Alert Sent");
-                  logEvent("Sent emergency alert to all channels");
-                  // This could trigger multiple notifications at once
-                  sendSlackMessage("war-room", "Critical incident declared");
-                }}
-              >
-                🚨 ALERT ALL CHANNELS
-              </Button>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button className="w-full bg-red-500 hover:bg-red-600 text-white">
+                    🚨 ALERT ALL CHANNELS
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Are you absolutely sure?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This will send emergency alerts to all channels and notify
+                      all team members.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() => {
+                        toast.success("Emergency Alert Sent");
+                        logEvent("Sent emergency alert to all channels");
+                        sendSlackMessage(
+                          "war-room",
+                          "Critical incident declared"
+                        );
+                      }}
+                    >
+                      Continue
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
               <div className="text-sm text-gray-600 mt-1">
                 This will notify: Team Lead, Group Lead, and War Room
               </div>
@@ -110,16 +146,21 @@ export default function Checklist() {
           content: (
             <div className="mt-2 space-y-2">
               <Textarea
+                value={updateMessage}
+                onChange={(e) => setUpdateMessage(e.target.value)}
                 className="w-full p-2 border rounded"
                 placeholder="Type status update here..."
                 rows={3}
               />
               <Button
                 className="w-full bg-yellow-500 hover:bg-yellow-600 text-white"
+                disabled={!updateMessage.trim()}
                 onClick={() => {
-                  // This could broadcast to all relevant channels at once
-                  toast.success("Update broadcast to all channels");
-                  logEvent("Broadcast status update");
+                  if (updateMessage.trim()) {
+                    toast.success("Update broadcast to all channels");
+                    logEvent("Broadcast status update");
+                    setUpdateMessage("");
+                  }
                 }}
               >
                 Broadcast Update to All Channels
@@ -148,7 +189,7 @@ export default function Checklist() {
         },
       ]);
     }
-  }, [checklistItems.length, setChecklistItems, logEvent]);
+  }, [checklistItems.length, setChecklistItems, logEvent, updateMessage]);
 
   const handleCheck = (id: string) => {
     setChecklistItems((prevItems) =>
@@ -167,16 +208,52 @@ export default function Checklist() {
   };
 
   const handleCloseWarRoom = async () => {
-    await sendSlackMessage("war-room-channel", "War room closed");
-    logEvent("War room closed");
-    toast.success("War Room closed", {
-      description:
-        "All actions have been logged and the war room has been closed",
-    });
-    router.push("/logger");
+    try {
+      setIsLoading(true);
+      await sendSlackMessage("war-room-channel", "War room closed");
+      logEvent("War room closed");
+      toast.success("War Room closed", {
+        description:
+          "All actions have been logged and the war room has been closed",
+      });
+      router.push("/logger");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to close war room");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const allChecked = checklistItems.every((item) => item.checked);
+
+  const handleSlackMessage = async (channel: string, message: string) => {
+    try {
+      await sendSlackMessage(channel, message);
+      toast.success(`Message sent to ${channel} channel`, {
+        description: "Your update has been published successfully",
+      });
+      logEvent(`Published update to ${channel}`);
+    } catch (error) {
+      console.error(error);
+
+      toast.error(`Failed to send message to ${channel} `, {
+        description: "Please try again or contact support",
+      });
+    }
+  };
+
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.ctrlKey && event.key === "l") {
+        event.preventDefault();
+        router.push("/logger");
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  }, [router]);
 
   return (
     <main className="min-h-screen p-4 md:p-12 max-w-2xl mx-auto">
@@ -229,21 +306,16 @@ export default function Checklist() {
                   <div className="flex flex-wrap gap-2">
                     <Button
                       variant="destructive"
-                      onClick={() => {
-                        sendSlackMessage("war-room", "Update message");
-                        logEvent("Published update to War Room");
-                        toast.success("Message sent to War Room channel", {
-                          description:
-                            "Your update has been published successfully",
-                        });
-                      }}
+                      onClick={() =>
+                        handleSlackMessage("war-room", "Update message")
+                      }
                     >
                       Publish to War Room
                     </Button>
                     <Button
                       variant="destructive"
                       onClick={() => {
-                        sendSlackMessage("a-team", "Update message");
+                        handleSlackMessage("a-team", "Update message");
                         logEvent("Updated A-Team Channel");
                         toast.success("Message sent to A-Team channel", {
                           description:
@@ -272,9 +344,9 @@ export default function Checklist() {
                   onClick={handleCloseWarRoom}
                   className="w-full"
                   variant="default"
-                  disabled={!allChecked}
+                  disabled={!allChecked || isLoading}
                 >
-                  Close War Room
+                  {isLoading ? "Closing..." : "Close War Room"}
                 </Button>
                 <p className="text-sm text-gray-600 text-center">
                   Move to the logger page and copy the logged process to start
