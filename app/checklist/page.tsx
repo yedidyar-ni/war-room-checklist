@@ -23,17 +23,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { toast } from "sonner";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 
 export default function Checklist() {
   const router = useRouter();
@@ -46,150 +35,12 @@ export default function Checklist() {
   } = useWarRoom();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [updateMessage, setUpdateMessage] = useState("");
 
   useEffect(() => {
     if (!isWarRoomOpen) {
       router.push("/");
     }
   }, [isWarRoomOpen, router]);
-
-  useEffect(() => {
-    if (checklistItems.length === 0) {
-      setChecklistItems([
-        {
-          id: "1",
-          title: "🚨 Is this a critical issue affecting multiple users?",
-          checked: false,
-          expanded: false,
-          content: (
-            <Button
-              className="w-full bg-red-500 hover:bg-red-600 text-white mt-2"
-              onClick={() => {
-                toast.success("War Room initiated");
-                logEvent("Confirmed critical issue status");
-              }}
-            >
-              Yes - Continue with War Room
-            </Button>
-          ),
-        },
-        {
-          id: "2",
-          title: "📞 Alert Management",
-          checked: false,
-          expanded: false,
-          content: (
-            <div className="mt-2 grid gap-2">
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button className="w-full bg-red-500 hover:bg-red-600 text-white">
-                    🚨 ALERT ALL CHANNELS
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>
-                      Are you absolutely sure?
-                    </AlertDialogTitle>
-                    <AlertDialogDescription>
-                      This will send emergency alerts to all channels and notify
-                      all team members.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={() => {
-                        toast.success("Emergency Alert Sent");
-                        logEvent("Sent emergency alert to all channels");
-                        sendSlackMessage(
-                          "war-room",
-                          "Critical incident declared"
-                        );
-                      }}
-                    >
-                      Continue
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-              <div className="text-sm text-gray-600 mt-1">
-                This will notify: Team Lead, Group Lead, and War Room
-              </div>
-            </div>
-          ),
-        },
-        {
-          id: "3",
-          title: "🎥 Start Emergency Meeting",
-          checked: false,
-          expanded: false,
-          content: (
-            <Button
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white mt-2"
-              onClick={() => {
-                toast.success("Emergency Zoom Started");
-                logEvent("Started emergency Zoom meeting");
-                // This could automatically start a Zoom and share the link
-              }}
-            >
-              Start & Share Emergency Zoom Link
-            </Button>
-          ),
-        },
-        {
-          id: "4",
-          title: "📢 Status Updates",
-          checked: false,
-          expanded: false,
-          content: (
-            <div className="mt-2 space-y-2">
-              <Textarea
-                value={updateMessage}
-                onChange={(e) => setUpdateMessage(e.target.value)}
-                className="w-full p-2 border rounded"
-                placeholder="Type status update here..."
-                rows={3}
-              />
-              <Button
-                className="w-full bg-yellow-500 hover:bg-yellow-600 text-white"
-                disabled={!updateMessage.trim()}
-                onClick={() => {
-                  if (updateMessage.trim()) {
-                    toast.success("Update broadcast to all channels");
-                    logEvent("Broadcast status update");
-                    setUpdateMessage("");
-                  }
-                }}
-              >
-                Broadcast Update to All Channels
-              </Button>
-            </div>
-          ),
-        },
-        {
-          id: "5",
-          title: "🚀 Emergency Deploy",
-          checked: false,
-          expanded: false,
-          content: (
-            <div className="mt-2">
-              <Button
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white"
-                onClick={() => {
-                  toast.success("Emergency deployment initiated");
-                  logEvent("Started emergency deployment");
-                }}
-              >
-                Start Emergency Deploy
-              </Button>
-            </div>
-          ),
-        },
-      ]);
-    }
-  }, [checklistItems.length, setChecklistItems, logEvent, updateMessage]);
 
   const handleCheck = (id: string) => {
     setChecklistItems((prevItems) =>
