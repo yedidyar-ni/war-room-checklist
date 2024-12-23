@@ -149,16 +149,32 @@ export default function Checklist() {
           checked: false,
           expanded: false,
           content: (
-            <div className="mt-2 space-y-2">
-              <Link href="#" className="text-blue-600 hover:underline block">
-                Jenkins Build 1
-              </Link>
-              <Link href="#" className="text-blue-600 hover:underline block">
-                Jenkins Build 2
-              </Link>
-              <Link href="#" className="text-blue-600 hover:underline block">
-                Jenkins Build 3
-              </Link>
+            <div className="mt-2 space-y-3">
+              <Button
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                onClick={() => {
+                  const jenkinsUrl =
+                    "https://jenkins.example.com/job/emergency-deploy/123";
+                  toast.success("Pipeline triggered successfully!", {
+                    description: (
+                      <Link
+                        href={jenkinsUrl}
+                        className="text-blue-600 hover:underline"
+                        target="_blank"
+                      >
+                        View build progress: {jenkinsUrl}
+                      </Link>
+                    ),
+                  });
+                  logEvent("Triggered emergency deployment pipeline");
+                }}
+              >
+                Trigger Emergency Deploy Pipeline
+              </Button>
+
+              <div className="text-sm text-gray-500 mt-2">
+                ⚠️ Only use for critical fixes that have been properly tested
+              </div>
             </div>
           ),
         },
@@ -180,6 +196,10 @@ export default function Checklist() {
                   onClick={() => {
                     sendSlackMessage("war-room", "Update message");
                     logEvent("Published update to War Room");
+                    toast.success("Message sent to War Room channel", {
+                      description:
+                        "Your update has been published successfully",
+                    });
                   }}
                 >
                   Publish to War Room
@@ -189,6 +209,10 @@ export default function Checklist() {
                   onClick={() => {
                     sendSlackMessage("a-team", "Update message");
                     logEvent("Updated A-Team Channel");
+                    toast.success("Message sent to A-Team channel", {
+                      description:
+                        "Your update has been published successfully",
+                    });
                   }}
                 >
                   A-Team Update Channel
@@ -216,6 +240,10 @@ export default function Checklist() {
   const handleCloseWarRoom = async () => {
     await sendSlackMessage("war-room-channel", "War room closed");
     logEvent("War room closed");
+    toast.success("War Room closed", {
+      description:
+        "All actions have been logged and the war room has been closed",
+    });
     router.push("/logger");
   };
 
@@ -269,6 +297,10 @@ export default function Checklist() {
                       onClick={() => {
                         sendSlackMessage("war-room", "Update message");
                         logEvent("Published update to War Room");
+                        toast.success("Message sent to War Room channel", {
+                          description:
+                            "Your update has been published successfully",
+                        });
                       }}
                     >
                       Publish to War Room
@@ -278,6 +310,10 @@ export default function Checklist() {
                       onClick={() => {
                         sendSlackMessage("a-team", "Update message");
                         logEvent("Updated A-Team Channel");
+                        toast.success("Message sent to A-Team channel", {
+                          description:
+                            "Your update has been published successfully",
+                        });
                       }}
                     >
                       A-Team Update Channel
