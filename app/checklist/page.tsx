@@ -16,13 +16,13 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { AlertCircle } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { toast } from "sonner";
 
 export default function Checklist() {
   const router = useRouter();
@@ -62,10 +62,43 @@ export default function Checklist() {
           checked: false,
           expanded: false,
           content: (
-            <ul className="mt-2 text-sm text-gray-600 list-disc list-inside">
-              <li>Notify Team Lead for low-severity issues.</li>
-              <li>Notify Group Lead - pager duty 1800132213311</li>
-            </ul>
+            <div className="mt-2 space-y-3">
+              <Button
+                className="w-full bg-yellow-500 hover:bg-yellow-600 text-white"
+                onClick={() => {
+                  console.log("toast");
+
+                  toast("Team Lead Notified");
+                  logEvent("Notified Team Lead for low-severity issue");
+                }}
+              >
+                Notify Team Lead
+              </Button>
+
+              <Button
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white"
+                onClick={() => {
+                  toast("Calling Group Lead");
+                  logEvent("Initiated PagerDuty call to Group Lead");
+                }}
+              >
+                Call Group Lead (PagerDuty)
+              </Button>
+
+              <Button
+                className="w-full bg-orange-600 hover:bg-orange-700 text-white"
+                onClick={() => {
+                  toast("SMS Sent");
+                  logEvent("Sent SMS to Group Lead PagerDuty");
+                }}
+              >
+                SMS Group Lead
+              </Button>
+
+              <p className="text-xs text-gray-500 text-center">
+                PagerDuty: 1800132213311
+              </p>
+            </div>
           ),
         },
         {
@@ -74,18 +107,40 @@ export default function Checklist() {
           checked: false,
           expanded: false,
           content: (
-            <Button
-              className="mt-2 bg-red-500 hover:bg-red-600 text-white"
-              onClick={() => {
-                sendSlackMessage(
-                  "prod-issues",
-                  `A new war room is opened, with ${description}, we will update after we assess the issue`
-                );
-                logEvent(`Notified Issue In Prod Room: ${description}`);
-              }}
-            >
-              Notify Issue In Prod Room
-            </Button>
+            <div className="mt-2 space-y-3">
+              <Button
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                onClick={() => {
+                  toast("Starting Zoom Meeting");
+                  logEvent("Started new Zoom meeting");
+                }}
+              >
+                Start New Zoom Meeting
+              </Button>
+
+              <Button
+                className="w-full bg-blue-500 hover:bg-blue-600 text-white"
+                onClick={() => {
+                  const meetingId = prompt("Enter Zoom meeting ID:");
+                  if (meetingId) {
+                    toast("Joined Zoom Meeting");
+                    logEvent(`Joined Zoom meeting: ${meetingId}`);
+                  }
+                }}
+              >
+                Join Existing Meeting
+              </Button>
+
+              <Button
+                className="w-full bg-red-500 hover:bg-red-600 text-white"
+                onClick={() => {
+                  toast("Team Notified");
+                  logEvent(`Notified Issue In Prod Room: ${description}`);
+                }}
+              >
+                Notify Team (Slack)
+              </Button>
+            </div>
           ),
         },
         {
@@ -168,14 +223,9 @@ export default function Checklist() {
 
   return (
     <main className="min-h-screen p-6 md:p-24 max-w-4xl mx-auto">
-      <Card className="mb-8 bg-red-50">
-        <CardContent className="pt-6 flex items-center gap-2">
-          <AlertCircle className="h-5 w-5 text-red-500" />
-          <p className="text-lg font-medium">
-            War Room: {decodeURIComponent(formattedDescription)}
-          </p>
-        </CardContent>
-      </Card>
+      <h1 className="text-lg text-center font-medium mb-8 border-b pb-4">
+        War Room: {decodeURIComponent(formattedDescription)}
+      </h1>
 
       <Accordion type="multiple" className="space-y-2">
         {checklistItems.map((item) => (
