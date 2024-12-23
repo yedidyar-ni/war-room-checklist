@@ -4,77 +4,164 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { useWarRoom } from "@/contexts/WarRoomContext";
 import { sendSlackMessage } from "@/utils/slack";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function Home() {
   const { title, setTitle, logEvent, setIsWarRoomOpen } = useWarRoom();
+  const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleOpenWarRoom = async (e: React.MouseEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setIsWarRoomOpen(true);
     logEvent(`Opened war room: ${title}`);
-
-    // Send message to Slack
-    await sendSlackMessage("war-room-channel", `New war room opened: ${title}`);
-
-    // Navigate to checklist page
+    await sendSlackMessage(
+      "war-room-channel",
+      `New war room opened:\nTitle: ${title}\nDescription: ${description}`
+    );
     router.push("/checklist");
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1 className="text-4xl font-bold mb-8">War Room Checklist</h1>
-      <div className="w-full max-w-sm">
-        <div className="flex items-center space-x-2 mb-4">
-          <Input
-            type="text"
-            placeholder="War room short description"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <Button
-            className="bg-blue-500 hover:bg-blue-600 text-white"
-            onClick={handleOpenWarRoom}
-            disabled={isLoading || !title.trim()}
-          >
-            {isLoading ? "Opening..." : "Open War Room"}
-          </Button>
-        </div>
-
-        <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="guidance" className="border-none">
-            <AccordionTrigger className="text-left hover:no-underline py-2">
-              Not sure if you need a War Room?
-            </AccordionTrigger>
-            <AccordionContent className="pt-1">
-              <div className="text-center border rounded-lg p-4 bg-gray-50">
-                <p className="text-gray-600">Consider opening a War Room if:</p>
-                <ul className="text-sm text-gray-600 mt-2 text-left list-disc pl-6">
-                  <li>{`There's a critical production incident`}</li>
-                  <li>{`Multiple teams need to coordinate`}</li>
-                  <li>{`Customer-facing services are impacted`}</li>
-                  <li>{`Immediate response is required`}</li>
-                </ul>
-                <a
-                  href="#"
-                  className="text-blue-500 hover:text-blue-600 text-sm mt-4 block"
+    <main className="min-h-screen flex items-center justify-center p-6">
+      <div className="w-full max-w-2xl space-y-6">
+        <Card className="border-2 border-blue-200 shadow-lg">
+          <CardHeader className="space-y-2">
+            <CardTitle className="text-2xl md:text-3xl text-center text-blue-900">
+              Open War Room
+            </CardTitle>
+            <CardDescription className="text-center text-blue-600">
+              Coordinate incident response and team collaboration
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-4">
+                <div>
+                  <label
+                    htmlFor="title"
+                    className="block text-sm font-medium mb-2 text-gray-700"
+                  >
+                    Incident Title
+                  </label>
+                  <Input
+                    id="title"
+                    name="title"
+                    type="text"
+                    placeholder="e.g., API Gateway Service Degradation"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="w-full"
+                    required
+                    aria-required="true"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="description"
+                    className="block text-sm font-medium mb-2 text-gray-700"
+                  >
+                    Detailed Description
+                  </label>
+                  <Textarea
+                    id="description"
+                    name="description"
+                    placeholder="Describe the incident, impact, and any relevant details..."
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    className="w-full min-h-[100px] resize-y"
+                    required
+                    aria-required="true"
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 h-12"
+                  disabled={isLoading || !title.trim() || !description.trim()}
+                  aria-label={
+                    isLoading ? "Opening war room..." : "Open war room"
+                  }
                 >
-                  Learn more about War Room protocols →
-                </a>
+                  {isLoading ? (
+                    <span
+                      className="flex items-center justify-center gap-2"
+                      role="status"
+                    >
+                      <svg
+                        className="animate-spin h-4 w-4"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                          fill="none"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                        />
+                      </svg>
+                      <span>Initializing War Room...</span>
+                    </span>
+                  ) : (
+                    "Open War Room"
+                  )}
+                </Button>
               </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+            </form>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-xl text-gray-800">Quick Tips</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-2 text-gray-600" role="list">
+              <li className="flex items-center gap-2">
+                <span className="text-blue-500" aria-hidden="true">
+                  •
+                </span>
+                Assign clear roles: Incident Commander, Communications Lead
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="text-blue-500" aria-hidden="true">
+                  •
+                </span>
+                Document all actions and decisions in real-time
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="text-blue-500" aria-hidden="true">
+                  •
+                </span>
+                Keep stakeholders updated regularly
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="text-blue-500" aria-hidden="true">
+                  •
+                </span>
+                Focus on immediate containment before root cause analysis
+              </li>
+            </ul>
+          </CardContent>
+        </Card>
       </div>
     </main>
   );
