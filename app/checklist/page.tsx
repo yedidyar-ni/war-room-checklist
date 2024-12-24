@@ -36,7 +36,9 @@ export default function Checklist() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [openItems, setOpenItems] = useState<string[]>(
-    checklistItems.at(0) ? [checklistItems.at(0)!.id] : []
+    checklistItems.at(0) && !checklistItems.at(0)!.checked
+      ? [checklistItems.at(0)!.id]
+      : []
   );
 
   useEffect(() => {
