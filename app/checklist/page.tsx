@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/accordion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Tooltip,
   TooltipContent,
@@ -99,22 +98,6 @@ export default function Checklist() {
 
   const allChecked = checklistItems.every((item) => item.checked);
 
-  const handleSlackMessage = async (channel: string, message: string) => {
-    try {
-      await sendSlackMessage(channel, message);
-      toast.success(`Message sent to ${channel} channel`, {
-        description: "Your update has been published successfully",
-      });
-      logEvent(`Published update to ${channel}`);
-    } catch (error) {
-      console.error(error);
-
-      toast.error(`Failed to send message to ${channel} `, {
-        description: "Please try again or contact support",
-      });
-    }
-  };
-
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
       if (event.ctrlKey && event.key === "l") {
@@ -129,16 +112,9 @@ export default function Checklist() {
 
   return (
     <main className="min-h-screen p-4 md:p-12 max-w-2xl mx-auto">
-      <h1 className="text-2xl text-center font-bold mb-6 text-red-600">
-        🚨 War Room: {decodeURIComponent(formattedDescription)}
+      <h1 className="text-2xl text-center font-bold mb-6 text-gray-800">
+        Incident Response: {decodeURIComponent(formattedDescription)}
       </h1>
-
-      <div className="bg-blue-300 p-4 rounded-lg mb-6 text-center text-sm">
-        <p className="font-medium">
-          Remember: Stay calm and follow the checklist
-        </p>
-        <p className="text-gray-600">Each step will be automatically logged</p>
-      </div>
 
       <Accordion
         type="multiple"
@@ -174,39 +150,7 @@ export default function Checklist() {
             </div>
             <Separator />
             <AccordionContent className="px-4 py-3">
-              {item.id === "5" ? (
-                <div className="space-y-4">
-                  <Textarea
-                    placeholder="Enter update message"
-                    className="min-h-[100px]"
-                  />
-                  <div className="flex flex-wrap gap-2">
-                    <Button
-                      variant="destructive"
-                      onClick={() =>
-                        handleSlackMessage("war-room", "Update message")
-                      }
-                    >
-                      Publish to War Room
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      onClick={() => {
-                        handleSlackMessage("a-team", "Update message");
-                        logEvent("Updated A-Team Channel");
-                        toast.success("Message sent to A-Team channel", {
-                          description:
-                            "Your update has been published successfully",
-                        });
-                      }}
-                    >
-                      A-Team Update Channel
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                item.content
-              )}
+              {item.content}
             </AccordionContent>
           </AccordionItem>
         ))}
