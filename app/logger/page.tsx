@@ -98,7 +98,8 @@ ${events
               </Button>
             </Link>
             <h1 className="text-2xl md:text-4xl font-bold">
-              War Room Logger: {decodeURIComponent(formattedDescription)}
+              War Room View Audit Log :{" "}
+              {decodeURIComponent(formattedDescription)}
             </h1>
           </div>
 

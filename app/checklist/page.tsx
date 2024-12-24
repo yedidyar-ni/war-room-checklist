@@ -185,7 +185,7 @@ export default function Checklist() {
       <div className="fixed bottom-6 right-6">
         <Link href="/logger">
           <Button variant="outline" className="shadow-lg">
-            View Logger
+            View Audit Log
           </Button>
         </Link>
       </div>
