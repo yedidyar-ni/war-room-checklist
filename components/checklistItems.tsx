@@ -182,7 +182,7 @@ export const createChecklistItems = (logEvent: (event: string) => void) => [
   },
   {
     id: "4",
-    title: "Status Updates",
+    title: "Status Update",
     checked: false,
     expanded: false,
     content: <StatusUpdate logEvent={logEvent} />,
