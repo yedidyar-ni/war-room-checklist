@@ -169,6 +169,7 @@ ${events
             />
             <Button
               type="submit"
+              disabled={newLog.trim() === ""}
               className="bg-green-500 hover:bg-green-600 text-white"
             >
               Add Log
