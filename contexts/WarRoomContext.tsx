@@ -8,7 +8,7 @@ import React, {
   useCallback,
 } from "react";
 
-interface LogEvent {
+export interface LogEvent {
   dateTime: string;
   description: string;
   createdBy: "user" | "system";
@@ -33,6 +33,7 @@ interface WarRoomContextType {
   isWarRoomOpen: boolean;
   setIsWarRoomOpen: (isOpen: boolean) => void;
   addEvent: (event: LogEvent) => void;
+  removeEvent: (dateTime: string) => void;
 }
 
 const WarRoomContext = createContext<WarRoomContextType | undefined>(undefined);
@@ -50,7 +51,7 @@ export function WarRoomProvider({ children }: { children: ReactNode }) {
   const formattedDescription = encodeURIComponent(title);
 
   const logEvent = useCallback(
-    (eventDescription: string, createdBy: "user" | "system" = "user") => {
+    (eventDescription: string, createdBy: "user" | "system" = "system") => {
       const newEvent = {
         dateTime: new Date().toISOString(),
         description: eventDescription,
@@ -72,6 +73,12 @@ export function WarRoomProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  const removeEvent = useCallback((dateTime: string) => {
+    setEvents((prevEvents) =>
+      prevEvents.filter((event) => event.dateTime !== dateTime)
+    );
+  }, []);
+
   return (
     <WarRoomContext.Provider
       value={{
@@ -85,6 +92,7 @@ export function WarRoomProvider({ children }: { children: ReactNode }) {
         isWarRoomOpen,
         setIsWarRoomOpen,
         addEvent,
+        removeEvent,
       }}
     >
       {children}

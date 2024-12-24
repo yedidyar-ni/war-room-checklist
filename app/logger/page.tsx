@@ -15,14 +15,15 @@ import {
   FileSpreadsheet,
   FileText,
   ArrowLeft,
+  Trash2,
 } from "lucide-react";
-import { useWarRoom } from "@/contexts/WarRoomContext";
+import { LogEvent, useWarRoom } from "@/contexts/WarRoomContext";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { DateTimePicker } from "@/components/ui/time-picker";
 
 export default function Logger() {
-  const { formattedDescription, events, isWarRoomOpen, addEvent } =
+  const { formattedDescription, events, isWarRoomOpen, addEvent, removeEvent } =
     useWarRoom();
   const [newLog, setNewLog] = useState("");
   const [selectedTime, setSelectedTime] = useState<Date>(new Date());
@@ -100,11 +101,20 @@ ${events
     addEvent({
       dateTime: selectedTime.toISOString(),
       description: newLog.trim(),
-      createdBy: "system",
+      createdBy: "user",
     });
     setNewLog("");
     setSelectedTime(new Date());
     toast.success("Log added successfully");
+  };
+
+  const handleRemoveEvent = (event: LogEvent) => {
+    if (event.createdBy !== "user") {
+      toast.error("Cannot remove system-generated events");
+      return;
+    }
+    removeEvent(event.dateTime);
+    toast.success("Event removed successfully");
   };
 
   return (
@@ -177,6 +187,9 @@ ${events
                   <th className="border-b px-6 py-3 text-left text-sm font-semibold text-gray-900 w-3/4">
                     Description
                   </th>
+                  <th className="border-b px-6 py-3 text-left text-sm font-semibold text-gray-900 w-16">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
@@ -190,6 +203,20 @@ ${events
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-900">
                       {event.description}
+                    </td>
+                    <td className="px-6 py-4 text-sm">
+                      {event.createdBy === "user" && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => {
+                            handleRemoveEvent(event);
+                          }}
+                          className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      )}
                     </td>
                   </tr>
                 ))}
