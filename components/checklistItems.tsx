@@ -27,13 +27,23 @@ export const createChecklistItems = (logEvent: (event: string) => void) => [
         </div>
         {[
           {
-            name: "Datadog Dashboard",
+            name: "Purchase Flow Monitoring Dashboard",
+            url: "https://systemhealth.yourdomain.com",
+          },
+          {
+            name: "System Health",
             url: "https://app.datadoghq.com/dashboard",
           },
-          { name: "Grafana Metrics", url: "https://grafana.yourdomain.com" },
-          { name: "Kibana Logs", url: "https://kibana.yourdomain.com" },
-          { name: "New Relic APM", url: "https://newrelic.com/apm" },
-          { name: "AWS Console", url: "https://console.aws.amazon.com" },
+          { name: "AWS Status Page", url: "https://grafana.yourdomain.com" },
+          {
+            name: "Stripe Status Page",
+            url: "https://kibana.yourdomain.com",
+          },
+          { name: "Check if Robin Available", url: "https://newrelic.com/apm" },
+          {
+            name: "Check if Public Site Available",
+            url: "https://newrelic.com/apm",
+          },
         ].map((tool) => (
           <a
             key={tool.name}
