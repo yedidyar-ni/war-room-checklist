@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import {
   AlertDialog,
@@ -13,7 +12,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { sendSlackMessage } from "@/utils/slack";
-import { useEffect, useState } from "react";
+import { StatusUpdate } from "@/app/components/StatusUpdate";
 
 export const createChecklistItems = (logEvent: (event: string) => void) => [
   {
@@ -118,50 +117,3 @@ export const createChecklistItems = (logEvent: (event: string) => void) => [
     ),
   },
 ];
-
-function StatusUpdate({ logEvent }: { logEvent: (event: string) => void }) {
-  const [timeLeft, setTimeLeft] = useState(30 * 60);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeLeft((prevTime) => prevTime - 1);
-    }, 1000);
-    if (timeLeft <= 0) {
-      toast.success("Update broadcast to all channels");
-      logEvent("Broadcast status update");
-      setTimeLeft(30 * 60);
-    }
-    return () => clearInterval(interval);
-  }, [logEvent, timeLeft]);
-
-  const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
-  };
-
-  return (
-    <div className="mt-2 space-y-2">
-      <div className="flex items-center justify-between mb-2">
-        <div className="text-sm font-bold text-gray-600">
-          Next automatic update in: {formatTime(timeLeft)}
-        </div>
-      </div>
-      <Textarea
-        className="w-full p-2 border rounded"
-        placeholder="Type status update here..."
-        rows={3}
-      />
-      <Button
-        className="w-full bg-yellow-500 hover:bg-yellow-600 text-white"
-        onClick={() => {
-          toast.success("Update broadcast to all channels");
-          logEvent("Broadcast status update");
-          setTimeLeft(30 * 60);
-        }}
-      >
-        Broadcast Update to All Channels
-      </Button>
-    </div>
-  );
-}
