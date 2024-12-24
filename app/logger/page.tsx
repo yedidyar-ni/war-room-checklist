@@ -25,7 +25,7 @@ export default function Logger() {
   const { formattedDescription, events, isWarRoomOpen, addEvent } =
     useWarRoom();
   const [newLog, setNewLog] = useState("");
-  const [selectedTime, setSelectedTime] = useState<Date | undefined>(undefined);
+  const [selectedTime, setSelectedTime] = useState<Date>(new Date());
 
   const formatTime = (dateTimeString: string) => {
     const date = new Date(dateTimeString);
@@ -97,25 +97,15 @@ ${events
     e.preventDefault();
     if (!newLog.trim()) return;
 
-    let eventDateTime: string;
-    if (selectedTime) {
-      eventDateTime = selectedTime.toISOString();
-    } else {
-      eventDateTime = new Date().toISOString();
-    }
-
     addEvent({
-      dateTime: eventDateTime,
+      dateTime: selectedTime.toISOString(),
       description: newLog.trim(),
+      createdBy: "system",
     });
     setNewLog("");
-    setSelectedTime(undefined);
+    setSelectedTime(new Date());
     toast.success("Log added successfully");
   };
-
-  const sortedEvents = [...events].sort(
-    (a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime()
-  );
 
   return (
     <main className="min-h-screen p-6 md:p-12">
@@ -159,7 +149,7 @@ ${events
 
         <div className="mb-6">
           <form onSubmit={handleAddLog} className="flex gap-2">
-            <DateTimePicker />
+            <DateTimePicker date={selectedTime} setDate={setSelectedTime} />
             <Input
               type="text"
               placeholder="Add new log entry..."
@@ -174,9 +164,6 @@ ${events
               Add Log
             </Button>
           </form>
-          <p className="text-sm text-gray-500 mt-1">
-            {selectedTime ? "Using custom time" : "Using current time"}
-          </p>
         </div>
 
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -193,7 +180,7 @@ ${events
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {sortedEvents.map((event, index) => (
+                {events.map((event, index) => (
                   <tr
                     key={index}
                     className="hover:bg-gray-50 transition-colors"

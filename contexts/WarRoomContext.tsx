@@ -11,6 +11,7 @@ import React, {
 interface LogEvent {
   dateTime: string;
   description: string;
+  createdBy: "user" | "system";
 }
 
 interface ChecklistItem {
@@ -48,13 +49,17 @@ export function WarRoomProvider({ children }: { children: ReactNode }) {
 
   const formattedDescription = encodeURIComponent(title);
 
-  const logEvent = useCallback((eventDescription: string) => {
-    const newEvent = {
-      dateTime: new Date().toISOString(),
-      description: eventDescription,
-    };
-    setEvents((prevEvents) => [...prevEvents, newEvent]);
-  }, []);
+  const logEvent = useCallback(
+    (eventDescription: string, createdBy: "user" | "system" = "user") => {
+      const newEvent = {
+        dateTime: new Date().toISOString(),
+        description: eventDescription,
+        createdBy,
+      };
+      setEvents((prevEvents) => [...prevEvents, newEvent]);
+    },
+    []
+  );
 
   const addEvent = (event: LogEvent) => {
     setEvents((prevEvents) => {
