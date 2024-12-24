@@ -17,19 +17,49 @@ import { StatusUpdate } from "@/components/StatusUpdate";
 export const createChecklistItems = (logEvent: (event: string) => void) => [
   {
     id: "1",
-    title: "Is this a critical issue affecting multiple users?",
+    title: "Assess Tools",
     checked: false,
     expanded: false,
     content: (
-      <Button
-        className="w-full bg-red-500 hover:bg-red-600 text-white mt-2"
-        onClick={() => {
-          toast.success("War Room initiated");
-          logEvent("Confirmed critical issue status");
-        }}
-      >
-        Yes - Continue with War Room
-      </Button>
+      <div className="grid gap-3 mt-2">
+        <div className="text-sm text-gray-600 mb-1">
+          Quick access to critical monitoring tools:
+        </div>
+        {[
+          {
+            name: "Datadog Dashboard",
+            url: "https://app.datadoghq.com/dashboard",
+          },
+          { name: "Grafana Metrics", url: "https://grafana.yourdomain.com" },
+          { name: "Kibana Logs", url: "https://kibana.yourdomain.com" },
+          { name: "New Relic APM", url: "https://newrelic.com/apm" },
+          { name: "AWS Console", url: "https://console.aws.amazon.com" },
+        ].map((tool) => (
+          <a
+            key={tool.name}
+            href={tool.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-100 transition-colors text-blue-600 hover:text-blue-800"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+              />
+            </svg>
+            {tool.name}
+          </a>
+        ))}
+      </div>
     ),
   },
   {
