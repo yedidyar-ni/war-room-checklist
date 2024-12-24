@@ -12,7 +12,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import {
   Tooltip,
@@ -99,12 +98,11 @@ export default function Checklist() {
 
   const handleTimerComplete = () => {
     toast.success("Update broadcast to all channels");
-    // Add any other timer completion logic here
   };
 
   return (
     <TimerProvider onComplete={handleTimerComplete}>
-      <main className="min-h-screen p-4 md:p-12 max-w-2xl mx-auto">
+      <main className="min-h-screen p-4 md:p-12 max-w-2xl mx-auto flex flex-col justify-center">
         <h1 className="text-2xl text-center font-bold mb-6 text-gray-800">
           War Room: {decodeURIComponent(formattedDescription)}
         </h1>
@@ -152,22 +150,14 @@ export default function Checklist() {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Card className="mt-8 border-green-200 bg-green-50">
-                <CardContent className="pt-6 space-y-4">
-                  <Button
-                    onClick={handleCloseWarRoom}
-                    className="w-full"
-                    variant="default"
-                    disabled={!allChecked || isLoading}
-                  >
-                    {isLoading ? "Closing..." : "Close War Room"}
-                  </Button>
-                  <p className="text-sm text-gray-600 text-center">
-                    Move to the logger page and copy the logged process to start
-                    writing the retro
-                  </p>
-                </CardContent>
-              </Card>
+              <Button
+                onClick={handleCloseWarRoom}
+                className="w-full mt-6"
+                variant="default"
+                disabled={!allChecked || isLoading}
+              >
+                {isLoading ? "Closing..." : "Close War Room"}
+              </Button>
             </TooltipTrigger>
             <TooltipContent>
               <p>Complete all checklist items to close the war room</p>
