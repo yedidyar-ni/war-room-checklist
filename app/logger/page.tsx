@@ -17,9 +17,15 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import { useWarRoom } from "@/contexts/WarRoomContext";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { DateTimePicker } from "@/components/ui/time-picker";
 
 export default function Logger() {
-  const { formattedDescription, events, isWarRoomOpen } = useWarRoom();
+  const { formattedDescription, events, isWarRoomOpen, addEvent } =
+    useWarRoom();
+  const [newLog, setNewLog] = useState("");
+  const [selectedTime, setSelectedTime] = useState<Date | undefined>(undefined);
 
   const formatTime = (dateTimeString: string) => {
     const date = new Date(dateTimeString);
@@ -87,6 +93,30 @@ ${events
     }
   };
 
+  const handleAddLog = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newLog.trim()) return;
+
+    let eventDateTime: string;
+    if (selectedTime) {
+      eventDateTime = selectedTime.toISOString();
+    } else {
+      eventDateTime = new Date().toISOString();
+    }
+
+    addEvent({
+      dateTime: eventDateTime,
+      description: newLog.trim(),
+    });
+    setNewLog("");
+    setSelectedTime(undefined);
+    toast.success("Log added successfully");
+  };
+
+  const sortedEvents = [...events].sort(
+    (a, b) => new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime()
+  );
+
   return (
     <main className="min-h-screen p-6 md:p-12">
       <div className="max-w-7xl mx-auto">
@@ -127,6 +157,28 @@ ${events
           </DropdownMenu>
         </div>
 
+        <div className="mb-6">
+          <form onSubmit={handleAddLog} className="flex gap-2">
+            <DateTimePicker />
+            <Input
+              type="text"
+              placeholder="Add new log entry..."
+              value={newLog}
+              onChange={(e) => setNewLog(e.target.value)}
+              className="flex-1"
+            />
+            <Button
+              type="submit"
+              className="bg-green-500 hover:bg-green-600 text-white"
+            >
+              Add Log
+            </Button>
+          </form>
+          <p className="text-sm text-gray-500 mt-1">
+            {selectedTime ? "Using custom time" : "Using current time"}
+          </p>
+        </div>
+
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full border-collapse">
@@ -141,7 +193,7 @@ ${events
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {events.map((event, index) => (
+                {sortedEvents.map((event, index) => (
                   <tr
                     key={index}
                     className="hover:bg-gray-50 transition-colors"

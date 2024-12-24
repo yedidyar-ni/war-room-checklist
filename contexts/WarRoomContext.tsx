@@ -31,6 +31,7 @@ interface WarRoomContextType {
   setChecklistItems: React.Dispatch<React.SetStateAction<ChecklistItem[]>>;
   isWarRoomOpen: boolean;
   setIsWarRoomOpen: (isOpen: boolean) => void;
+  addEvent: (event: LogEvent) => void;
 }
 
 const WarRoomContext = createContext<WarRoomContextType | undefined>(undefined);
@@ -55,6 +56,17 @@ export function WarRoomProvider({ children }: { children: ReactNode }) {
     setEvents((prevEvents) => [...prevEvents, newEvent]);
   }, []);
 
+  const addEvent = (event: LogEvent) => {
+    setEvents((prevEvents) => {
+      const newEvents = [...prevEvents, event];
+      // Sort events by dateTime
+      return newEvents.sort(
+        (a, b) =>
+          new Date(a.dateTime).getTime() - new Date(b.dateTime).getTime()
+      );
+    });
+  };
+
   return (
     <WarRoomContext.Provider
       value={{
@@ -67,6 +79,7 @@ export function WarRoomProvider({ children }: { children: ReactNode }) {
         setChecklistItems,
         isWarRoomOpen,
         setIsWarRoomOpen,
+        addEvent,
       }}
     >
       {children}
