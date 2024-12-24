@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card";
 import { useWarRoom } from "@/contexts/WarRoomContext";
 import { createChecklistItems } from "@/components/checklistItems";
+import { NotificationBanner } from "@/components/NotificationBanner";
 
 export default function Home() {
   const { title, setTitle, logEvent, setIsWarRoomOpen, setChecklistItems } =
@@ -56,7 +57,7 @@ export default function Home() {
                     id="title"
                     name="title"
                     type="text"
-                    placeholder="e.g., API Gateway Service Degradation"
+                    placeholder="e.g. unable to create quotes for customer"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     className="w-full"
@@ -108,11 +109,10 @@ export default function Home() {
             </form>
           </CardContent>
         </Card>
-
         <div className="bg-blue-50 p-4 rounded-lg mt-4">
-          <p className="text-blue-800 text-sm">
-            💡 <strong>Pro tip:</strong> When you open a War Room, emergency
-            communication channels will be activated
+          <p className="text-blue-800 text-lg">
+            will be notified When clicking “Open War Room” a message will be
+            sent to <NotificationBanner channelName="#prod_issue_war_room" />
           </p>
         </div>
       </div>
