@@ -38,35 +38,67 @@ export const createChecklistItems = (logEvent: (event: string) => void) => [
     checked: false,
     expanded: false,
     content: (
-      <div className="mt-2 grid gap-2">
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button className="w-full bg-red-500 hover:bg-red-600 text-white">
-              ALERT ALL CHANNELS
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This will send emergency alerts to all channels and notify all
-                team members.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction
-                onClick={() => {
-                  toast.success("Emergency Alert Sent");
-                  logEvent("Sent emergency alert to all channels");
-                  sendSlackMessage("war-room", "Critical incident declared");
-                }}
-              >
-                Continue
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+      <div className="mt-2 grid gap-4">
+        <div className="flex flex-row gap-2 justify-center">
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button className="bg-red-500 hover:bg-red-600 text-white">
+                ALERT ALL CHANNELS
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Alert All Channels?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This will send emergency alerts to all communication channels.
+                  Make sure this is a critical incident that requires full team
+                  awareness.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => {
+                    toast.success("Emergency Alert Sent to All Channels");
+                    logEvent("Sent emergency alert to all channels");
+                    sendSlackMessage("war-room", "Critical incident declared");
+                  }}
+                >
+                  Send Alerts
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button className="bg-red-500 hover:bg-red-600 text-white">
+                CALL PAGER DUTY
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Trigger PagerDuty Alert?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This will initiate emergency on-call notifications through
+                  PagerDuty. All on-call engineers will be paged.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => {
+                    toast.success("PagerDuty Alert Triggered");
+                    logEvent("Triggered PagerDuty emergency alert");
+                    // Add PagerDuty integration call here if needed
+                  }}
+                >
+                  Trigger PagerDuty
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
         <div className="text-sm text-gray-600 mt-1">
           This will notify: Team Lead, Group Lead, and War Room
         </div>
