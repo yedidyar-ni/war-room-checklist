@@ -30,7 +30,6 @@ import {
 export default function Home() {
   const { title, setTitle, logEvent, setIsWarRoomOpen, setChecklistItems } =
     useWarRoom();
-  const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -39,10 +38,6 @@ export default function Home() {
     setIsLoading(true);
     setIsWarRoomOpen(true);
     logEvent(`Opened war room: ${title}`);
-    await sendSlackMessage(
-      "war-room-channel",
-      `New war room opened:\nTitle: ${title}\nDescription: ${description}`
-    );
 
     setChecklistItems([
       {
@@ -205,24 +200,7 @@ export default function Home() {
                     aria-required="true"
                   />
                 </div>
-                <div>
-                  <label
-                    htmlFor="description"
-                    className="block text-sm font-medium mb-2 text-gray-700"
-                  >
-                    Detailed Description{" "}
-                    <span className="text-gray-500">(optional)</span>
-                  </label>
-                  <Textarea
-                    id="description"
-                    name="description"
-                    placeholder="Describe the incident, impact, and any relevant details..."
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    className="w-full min-h-[100px] resize-y"
-                    aria-required="false"
-                  />
-                </div>
+
                 <Button
                   type="submit"
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 h-12"
@@ -267,33 +245,12 @@ export default function Home() {
           </CardContent>
         </Card>
 
-        <Card className="border border-gray-200 shadow-sm bg-white/50 backdrop-blur-sm">
-          <CardHeader>
-            <CardTitle className="text-xl text-gray-800">Quick Tips</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-2 text-gray-600" role="list">
-              <li className="flex items-center gap-2">
-                <span className="text-blue-500" aria-hidden="true">
-                  •
-                </span>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="text-blue-500" aria-hidden="true">
-                  •
-                </span>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="text-blue-500" aria-hidden="true">
-                  •
-                </span>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              </li>
-            </ul>
-          </CardContent>
-        </Card>
+        <div className="bg-blue-50 p-4 rounded-lg mt-4">
+          <p className="text-blue-800 text-sm">
+            💡 <strong>Pro tip:</strong> When you open a War Room, emergency
+            communication channels will be activated
+          </p>
+        </div>
       </div>
     </main>
   );
