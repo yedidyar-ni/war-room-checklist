@@ -106,7 +106,7 @@ export default function Checklist() {
     <TimerProvider onComplete={handleTimerComplete}>
       <main className="min-h-screen p-4 md:p-12 max-w-2xl mx-auto">
         <h1 className="text-2xl text-center font-bold mb-6 text-gray-800">
-          Incident Response: {decodeURIComponent(formattedDescription)}
+          War Room: {decodeURIComponent(formattedDescription)}
         </h1>
 
         <Accordion
