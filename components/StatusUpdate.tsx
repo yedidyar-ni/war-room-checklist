@@ -31,7 +31,7 @@ const CHANNELS = [
     name: "#media_buying_shutdown",
     className: "bg-blue-500 hover:bg-blue-600",
   },
-];
+] as const;
 
 export function StatusUpdate({ logEvent }: StatusUpdateProps) {
   const { formattedTime, resetTimer } = useTimer();
@@ -59,7 +59,6 @@ export function StatusUpdate({ logEvent }: StatusUpdateProps) {
         </div>
       </div>
 
-      {/* Canned Messages */}
       <div className="flex flex-wrap gap-1.5">
         {Object.entries(CANNED_MESSAGES).map(([key, message]) => (
           <Button
@@ -82,7 +81,6 @@ export function StatusUpdate({ logEvent }: StatusUpdateProps) {
         onChange={(e) => setUpdateText(e.target.value)}
       />
 
-      {/* Channel Buttons */}
       <div className="flex gap-2">
         {CHANNELS.map((channel) => (
           <Button

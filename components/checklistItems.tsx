@@ -4,7 +4,7 @@ import { StatusUpdate } from "@/components/StatusUpdate";
 
 export const createChecklistItems = (logEvent: (event: string) => void) => [
   {
-    id: "3",
+    id: "1",
     title: "Start Emergency Meeting",
     checked: false,
     expanded: false,
@@ -21,7 +21,7 @@ export const createChecklistItems = (logEvent: (event: string) => void) => [
     ),
   },
   {
-    id: "1",
+    id: "2",
     title: "Assess Tools",
     checked: false,
     expanded: false,
@@ -78,7 +78,7 @@ export const createChecklistItems = (logEvent: (event: string) => void) => [
     ),
   },
   {
-    id: "2",
+    id: "3",
     title: "Alert Management",
     checked: false,
     expanded: false,
@@ -121,7 +121,7 @@ export const createChecklistItems = (logEvent: (event: string) => void) => [
     ),
   },
   {
-    id: "6",
+    id: "4",
     title: "Handle",
     checked: false,
     expanded: false,
@@ -181,29 +181,10 @@ export const createChecklistItems = (logEvent: (event: string) => void) => [
     ),
   },
   {
-    id: "4",
+    id: "5",
     title: "Status Update",
     checked: false,
     expanded: false,
     content: <StatusUpdate logEvent={logEvent} />,
-  },
-  {
-    id: "5",
-    title: "Emergency Deploy",
-    checked: false,
-    expanded: false,
-    content: (
-      <div className="mt-2">
-        <Button
-          className="w-full bg-purple-600 hover:bg-purple-700 text-white"
-          onClick={() => {
-            toast.success("Emergency deployment initiated");
-            logEvent("Started emergency deployment");
-          }}
-        >
-          Start Emergency Deploy
-        </Button>
-      </div>
-    ),
   },
 ];
