@@ -35,6 +35,9 @@ export default function Checklist() {
   } = useWarRoom();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [openItems, setOpenItems] = useState<string[]>(
+    checklistItems.at(0) ? [checklistItems.at(0)!.id] : []
+  );
 
   useEffect(() => {
     if (!isWarRoomOpen) {
@@ -43,11 +46,29 @@ export default function Checklist() {
   }, [isWarRoomOpen, router]);
 
   const handleCheck = (id: string) => {
-    setChecklistItems((prevItems) =>
-      prevItems.map((item) =>
+    setChecklistItems((prevItems) => {
+      const updatedItems = prevItems.map((item) =>
         item.id === id ? { ...item, checked: !item.checked } : item
-      )
-    );
+      );
+
+      const currentItem = prevItems.find((item) => item.id === id);
+      if (currentItem && !currentItem.checked) {
+        const currentIndex = prevItems.findIndex((item) => item.id === id);
+        const nextItem = prevItems
+          .slice(currentIndex + 1)
+          .find((item) => !item.checked);
+
+        if (nextItem) {
+          setOpenItems((prev) => {
+            const newItems = prev.filter((item) => item !== id);
+            return [...newItems, nextItem.id];
+          });
+        }
+      }
+
+      return updatedItems;
+    });
+
     const item = checklistItems.find((item) => item.id === id);
     if (item) {
       logEvent(
@@ -119,7 +140,12 @@ export default function Checklist() {
         <p className="text-gray-600">Each step will be automatically logged</p>
       </div>
 
-      <Accordion type="multiple" className="space-y-2">
+      <Accordion
+        type="multiple"
+        className="space-y-2"
+        value={openItems}
+        onValueChange={setOpenItems}
+      >
         {checklistItems.map((item) => (
           <AccordionItem
             key={item.id}
