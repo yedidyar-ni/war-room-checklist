@@ -45,29 +45,25 @@ export default function Checklist() {
     }
   }, [isWarRoomOpen, router]);
 
-  const handleCheck = (id: string) => {
+  const handleCheck = (id: string, index: number) => {
     setChecklistItems((prevItems) => {
       const updatedItems = prevItems.map((item) =>
         item.id === id ? { ...item, checked: !item.checked } : item
       );
 
-      const currentItem = prevItems.find((item) => item.id === id);
-      if (currentItem && !currentItem.checked) {
-        const currentIndex = prevItems.findIndex((item) => item.id === id);
-        const nextItem = prevItems
-          .slice(currentIndex + 1)
-          .find((item) => !item.checked);
-
-        if (nextItem) {
-          setOpenItems((prev) => {
-            const newItems = prev.filter((item) => item !== id);
-            return [...newItems, nextItem.id];
-          });
-        }
-      }
-
       return updatedItems;
     });
+    const currentItem = checklistItems.find((item) => item.id === id);
+    if (currentItem && !currentItem.checked) {
+      const nextItem = checklistItems[index + 1];
+
+      if (nextItem && !nextItem.checked) {
+        setOpenItems((prev) => {
+          const newItems = prev.filter((item) => item !== id);
+          return [...newItems, nextItem.id];
+        });
+      }
+    }
 
     const item = checklistItems.find((item) => item.id === id);
     if (item) {
@@ -99,18 +95,6 @@ export default function Checklist() {
 
   const allChecked = checklistItems.every((item) => item.checked);
 
-  useEffect(() => {
-    const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.ctrlKey && event.key === "l") {
-        event.preventDefault();
-        router.push("/logger");
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyPress);
-    return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [router]);
-
   const handleTimerComplete = () => {
     toast.success("Update broadcast to all channels");
     // Add any other timer completion logic here
@@ -129,7 +113,7 @@ export default function Checklist() {
           value={openItems}
           onValueChange={setOpenItems}
         >
-          {checklistItems.map((item) => (
+          {checklistItems.map((item, index) => (
             <AccordionItem
               key={item.id}
               value={item.id}
@@ -140,7 +124,7 @@ export default function Checklist() {
               <div className="flex items-center px-4 py-2 gap-3">
                 <Checkbox
                   checked={item.checked}
-                  onCheckedChange={() => handleCheck(item.id)}
+                  onCheckedChange={() => handleCheck(item.id, index)}
                   className="h-5 w-5"
                 />
                 <AccordionTrigger className="hover:no-underline py-2">
