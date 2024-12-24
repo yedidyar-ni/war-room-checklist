@@ -1,17 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { sendSlackMessage } from "@/utils/slack";
 import { StatusUpdate } from "@/components/StatusUpdate";
 
 export const createChecklistItems = (logEvent: (event: string) => void) => [
@@ -78,70 +66,40 @@ export const createChecklistItems = (logEvent: (event: string) => void) => [
     checked: false,
     expanded: false,
     content: (
-      <div className="mt-2 grid gap-4">
-        <div className="flex flex-row gap-2 justify-center">
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button className="bg-red-500 hover:bg-red-600 text-white">
-                ALERT ALL CHANNELS
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Alert All Channels?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This will send emergency alerts to all communication channels.
-                  Make sure this is a critical incident that requires full team
-                  awareness.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={() => {
-                    toast.success("Emergency Alert Sent to All Channels");
-                    logEvent("Sent emergency alert to all channels");
-                    sendSlackMessage("war-room", "Critical incident declared");
-                  }}
-                >
-                  Send Alerts
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+      <div className="space-y-4">
+        <Button
+          variant="destructive"
+          onClick={() => {
+            toast("Calling Engineering Group Lead at +1-111-222-3333");
+          }}
+          className="text-wrap p-8"
+        >
+          Involve an engineering group lead: Call the Critical Incident Response
+          Phone +1-111-222-3333 (select 2) or reachout to them directly (Phone,
+          Whatsapp)
+        </Button>
 
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button className="bg-red-500 hover:bg-red-600 text-white">
-                CALL PAGER DUTY
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Trigger PagerDuty Alert?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This will initiate emergency on-call notifications through
-                  PagerDuty. All on-call engineers will be paged.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={() => {
-                    toast.success("PagerDuty Alert Triggered");
-                    logEvent("Triggered PagerDuty emergency alert");
-                    // Add PagerDuty integration call here if needed
-                  }}
-                >
-                  Trigger PagerDuty
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
-        <div className="text-sm text-gray-600 mt-1">
-          This will notify: Team Lead, Group Lead, and War Room
-        </div>
+        <Button
+          variant="destructive"
+          onClick={() => {
+            toast("Calling Platform Engineering Support at +1-444-555-6666");
+          }}
+          className="text-wrap p-8"
+        >
+          If you require Platform Engineering: Call the Critical Incident
+          Response Phone +1-444-555-6666 (select 3)
+        </Button>
+
+        <Button
+          variant="destructive"
+          onClick={() => {
+            toast("Opening team contact directory...");
+          }}
+          className="text-wrap p-8"
+        >
+          If you have identified the owner of the issue, ask for the Team Lead
+          or the Service team members to join
+        </Button>
       </div>
     ),
   },
