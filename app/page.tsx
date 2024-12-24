@@ -47,7 +47,7 @@ export default function Home() {
     setChecklistItems([
       {
         id: "1",
-        title: "🚨 Is this a critical issue affecting multiple users?",
+        title: "Is this a critical issue affecting multiple users?",
         checked: false,
         expanded: false,
         content: (
@@ -64,7 +64,7 @@ export default function Home() {
       },
       {
         id: "2",
-        title: "📞 Alert Management",
+        title: "Alert Management",
         checked: false,
         expanded: false,
         content: (
@@ -72,7 +72,7 @@ export default function Home() {
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button className="w-full bg-red-500 hover:bg-red-600 text-white">
-                  🚨 ALERT ALL CHANNELS
+                  ALERT ALL CHANNELS
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
@@ -108,7 +108,7 @@ export default function Home() {
       },
       {
         id: "3",
-        title: "🎥 Start Emergency Meeting",
+        title: "Start Emergency Meeting",
         checked: false,
         expanded: false,
         content: (
@@ -126,7 +126,7 @@ export default function Home() {
       },
       {
         id: "4",
-        title: "📢 Status Updates",
+        title: "Status Updates",
         checked: false,
         expanded: false,
         content: (
@@ -150,7 +150,7 @@ export default function Home() {
       },
       {
         id: "5",
-        title: "🚀 Emergency Deploy",
+        title: "Emergency Deploy",
         checked: false,
         expanded: false,
         content: (
