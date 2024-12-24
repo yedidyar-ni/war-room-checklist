@@ -3,20 +3,7 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { toast } from "sonner";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Download,
-  Copy,
-  FileSpreadsheet,
-  FileText,
-  ArrowLeft,
-  Trash2,
-} from "lucide-react";
+import { Copy, ArrowLeft, Trash2 } from "lucide-react";
 import { LogEvent, useWarRoom } from "@/contexts/WarRoomContext";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
@@ -47,50 +34,6 @@ export default function Logger() {
     } catch (err) {
       console.error("Failed to copy events: ", err);
       toast.error("Failed to copy events to clipboard");
-    }
-  };
-
-  const exportToExcel = () => {
-    try {
-      toast.success("Excel file downloaded successfully");
-    } catch (err) {
-      console.error("Failed to export to Excel: ", err);
-      toast.error("Failed to export to Excel");
-    }
-  };
-
-  const generateRetroTemplate = () => {
-    try {
-      const template = `# War Room Retro: ${formattedDescription}
-      
-## Timeline of Events
-${events
-  .map((event) => `${formatTime(event.dateTime)} - ${event.description}`)
-  .join("\n")}
-
-## What Went Well
-
-## What Could Be Improved
-
-## Action Items
-
-## Key Learnings
-
-## Follow-up Tasks`;
-
-      const blob = new Blob([template], { type: "text/markdown" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `war-room-retro-${formattedDescription}.md`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      toast.success("Retro template downloaded successfully");
-    } catch (err) {
-      console.error("Failed to generate retro template: ", err);
-      toast.error("Failed to generate retro template");
     }
   };
 
@@ -133,28 +76,13 @@ ${events
             </h1>
           </div>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button className="bg-blue-500 hover:bg-blue-600 text-white">
-                <Download className="mr-2 h-4 w-4" />
-                Export Options
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem onClick={handleCopyEvents}>
-                <Copy className="mr-2 h-4 w-4" />
-                Copy to Clipboard
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={exportToExcel}>
-                <FileSpreadsheet className="mr-2 h-4 w-4" />
-                Export to Excel
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={generateRetroTemplate}>
-                <FileText className="mr-2 h-4 w-4" />
-                Generate Retro
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Button
+            className="bg-blue-500 hover:bg-blue-600 text-white"
+            onClick={handleCopyEvents}
+          >
+            <Copy className="mr-2 h-4 w-4" />
+            Copy to Clipboard
+          </Button>
         </div>
 
         <div className="mb-6">
