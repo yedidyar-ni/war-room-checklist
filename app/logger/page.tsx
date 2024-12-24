@@ -85,26 +85,6 @@ export default function Logger() {
           </Button>
         </div>
 
-        <div className="mb-6">
-          <form onSubmit={handleAddLog} className="flex gap-2">
-            <DateTimePicker date={selectedTime} setDate={setSelectedTime} />
-            <Input
-              type="text"
-              placeholder="Add new log entry..."
-              value={newLog}
-              onChange={(e) => setNewLog(e.target.value)}
-              className="flex-1"
-            />
-            <Button
-              type="submit"
-              disabled={newLog.trim() === ""}
-              className="bg-green-500 hover:bg-green-600 text-white"
-            >
-              Add Log
-            </Button>
-          </form>
-        </div>
-
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full border-collapse">
@@ -152,6 +132,26 @@ export default function Logger() {
               </tbody>
             </table>
           </div>
+        </div>
+
+        <div className="mt-6">
+          <form onSubmit={handleAddLog} className="flex gap-2">
+            <DateTimePicker date={selectedTime} setDate={setSelectedTime} />
+            <Input
+              type="text"
+              placeholder="Add new log entry..."
+              value={newLog}
+              onChange={(e) => setNewLog(e.target.value)}
+              className="flex-1"
+            />
+            <Button
+              type="submit"
+              disabled={newLog.trim() === ""}
+              className="bg-green-500 hover:bg-green-600 text-white"
+            >
+              Add Log
+            </Button>
+          </form>
         </div>
       </div>
     </main>
