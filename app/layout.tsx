@@ -1,7 +1,7 @@
 import "./globals.css";
 import { Quicksand } from "next/font/google";
-import { WarRoomProvider } from "../contexts/WarRoomContext";
 import { Toaster } from "@/components/ui/sonner";
+import { WarRoomProvider } from "@/contexts/WarRoomContext";
 
 const inter = Quicksand({ subsets: ["latin"] });
 

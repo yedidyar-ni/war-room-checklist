@@ -1,4 +1,4 @@
-import { useTimer } from "@/app/contexts/TimerContext";
+import { useTimer } from "@/contexts/TimerContext";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";

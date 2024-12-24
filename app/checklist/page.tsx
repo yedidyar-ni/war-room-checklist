@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
-import { useWarRoom } from "@/contexts/WarRoomContext";
 import { sendSlackMessage } from "@/utils/slack";
 import {
   Accordion,
@@ -22,7 +21,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { toast } from "sonner";
-import { TimerProvider } from "@/app/contexts/TimerContext";
+import { TimerProvider } from "@/contexts/TimerContext";
+import { useWarRoom } from "@/contexts/WarRoomContext";
 
 export default function Checklist() {
   const router = useRouter();

@@ -12,7 +12,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { sendSlackMessage } from "@/utils/slack";
-import { StatusUpdate } from "@/app/components/StatusUpdate";
+import { StatusUpdate } from "@/components/StatusUpdate";
 
 export const createChecklistItems = (logEvent: (event: string) => void) => [
   {

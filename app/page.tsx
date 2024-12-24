@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useWarRoom } from "@/contexts/WarRoomContext";
 import {
   Card,
   CardContent,
@@ -12,7 +11,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { createChecklistItems } from "@/app/data/checklistItems";
+import { useWarRoom } from "@/contexts/WarRoomContext";
+import { createChecklistItems } from "@/components/checklistItems";
 
 export default function Home() {
   const { title, setTitle, logEvent, setIsWarRoomOpen, setChecklistItems } =

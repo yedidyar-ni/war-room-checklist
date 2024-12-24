@@ -1,5 +1,5 @@
 import { createContext, useContext, ReactNode } from "react";
-import { useCountdownTimer } from "@/app/hooks/useCountdownTimer";
+import { useCountdownTimer } from "@/hooks/useCountdownTimer";
 interface TimerContextType {
   formattedTime: string;
   resetTimer: () => void;

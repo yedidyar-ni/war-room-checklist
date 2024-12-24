@@ -1,6 +1,5 @@
 "use client";
 
-import { useWarRoom } from "@/contexts/WarRoomContext";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -17,6 +16,7 @@ import {
   FileText,
   ArrowLeft,
 } from "lucide-react";
+import { useWarRoom } from "@/contexts/WarRoomContext";
 
 export default function Logger() {
   const { formattedDescription, events, isWarRoomOpen } = useWarRoom();
